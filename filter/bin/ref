@@ -4,6 +4,13 @@ set -e
 
 pattern=$1
 
+actual=$(jq -r .ref "$GITHUB_EVENT_PATH")
+
+echo "$actual" | grep -Eq "^$GITHUB_REF$" || {
+  echo "env ref and event ref is not same"
+  exit 78
+}
+
 case "$GITHUB_REF" in
   "")
     echo "\$GITHUB_REF is not set"
